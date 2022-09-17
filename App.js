@@ -57,6 +57,8 @@ export default function App() {
   const [heightInch ,setHeightInch ] = React.useState(0);
   const [weight ,setWeight ] = React.useState(0);
   const [errorMessage ,setErrorMessage ] = React.useState('');
+  const [bmi ,setBMI ] = React.useState('');
+
 
   function clearFields(){
     setheightMetric('0');
@@ -82,7 +84,19 @@ export default function App() {
   //function to calculate BMI using height and weight
   function calculatBMI(){
     if(isValidData()){
-        if(_isMetricUnits()){}
+        var heightToMeters = 0;
+        var weightInKg = weight;
+        if(!_isMetricUnits()){
+          heightToMeters += heightFeet*30.48/100;
+          heightToMeters += heightInch *2.54/100;
+          weightInKg = weight *0.45359237;
+        }
+        else{
+          heightToMeters = heightMetric/100;
+        }
+
+        var tempBMI = weightInKg/(heightToMeters*heightToMeters);
+        setBMI(tempBMI.toFixed(1));
     }
   }
 
@@ -163,7 +177,7 @@ export default function App() {
           <Text style={styles.optionSelectorText}>Calculate</Text>
         </TouchableOpacity>
         {errorMessage !='' && <ErrorText>{errorMessage}</ErrorText>}
-
+        <LargeText>{bmi}</LargeText>
       </ScrollView>
     </View>
   );
