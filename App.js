@@ -14,7 +14,10 @@ function CustomTextInput(props){
   return(
   <View style={styles.editTextView}>
     <TextInput style={styles.editTextInput}
-    clearTextOnFocus={true}>0</TextInput>
+    clearTextOnFocus={props.text == '0'?true:false} 
+    onChangeText={(str)=>props.onChangeText(str)}
+    value={props.text == ''?'0':props.text}
+    ></TextInput>
     <Text style={styles.editTextSubTitle}>{props.label}</Text>
   </View>);
 }
@@ -37,13 +40,24 @@ function OptionSelector(props){
         </TouchableOpacity>
     </View>
   );
+
 }
+
+
 
 export default function App() {
   const [state ,setButtonState ] = React.useState(0);
   const [heightStandard ,setHeightStandard ] = React.useState(0);
   const [heightFeet ,setHeightFeet ] = React.useState(0);
   const [heightInch ,setHeightInch ] = React.useState(0);
+  const [weight ,setWeight ] = React.useState(0);
+
+  function clearFields(){
+    setHeightStandard(0);
+    setHeightFeet(0);
+    setHeightInch(0);
+    setWeight(0);
+  }
 
   return (
     <View >
@@ -52,22 +66,27 @@ export default function App() {
       </SafeAreaView>
       <ScrollView style={{paddingLeft:20,paddingRight:20}}>
         <SizedBox height={20} />
-        <OptionSelector state={state} onPress={(i)=>setButtonState(i)}></OptionSelector>
+        <OptionSelector state={state} onPress={function (i){setButtonState(i);clearFields();}}></OptionSelector>
         <SizedBox height={20} />
         <LargeText>Your height </LargeText>
         <SizedBox height={10} />
-        <View style={{flexDirection:'row'}}>
-          <CustomTextInput label="Feet (ft)"></CustomTextInput>
+        { state == 0 && <View style={{flexDirection:'row'}}>
+          <CustomTextInput text={heightFeet} onChangeText={(x)=>setHeightFeet(x)} label="Feet (ft)">
+          </CustomTextInput>
           <SizedBox width={20} />
-          <CustomTextInput label="Inch (in)"></CustomTextInput>
-        </View>
-
-        <CustomTextInput label="Height (cm)"></CustomTextInput>
+          <CustomTextInput text={heightInch} onChangeText={(x)=>setHeightInch(x)}label="Inch (in)">
+          </CustomTextInput>
+        </View>}
+        {state == 1 &&
+          <CustomTextInput label="Height (cm)" text={heightStandard} onChangeText={(x)=>setHeightStandard(x)}>
+          </CustomTextInput>
+         }
         <SizedBox height={20} />
-
+       
         <LargeText>Your weight </LargeText>
         <SizedBox height={10} />
-        <CustomTextInput label="Weight (kg)"></CustomTextInput>
+        <CustomTextInput text={weight} onChangeText={(x)=>setWeight(x)} label={"Weight "+(state == 1? "(kg)":"(lb)")}></CustomTextInput>
+        <LargeText>{heightStandard}</LargeText>
 
       </ScrollView>
     </View>
