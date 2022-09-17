@@ -52,14 +52,14 @@ function OptionSelector(props){
 
 export default function App() {
   const [state ,setButtonState ] = React.useState(0);
-  const [heightStandard ,setHeightStandard ] = React.useState(0);
+  const [heightMetric ,setheightMetric ] = React.useState(0);
   const [heightFeet ,setHeightFeet ] = React.useState(0);
   const [heightInch ,setHeightInch ] = React.useState(0);
   const [weight ,setWeight ] = React.useState(0);
   const [errorMessage ,setErrorMessage ] = React.useState('');
 
   function clearFields(){
-    setHeightStandard('0');
+    setheightMetric('0');
     setHeightFeet('0');
     setHeightInch('0');
     setWeight('0');
@@ -67,33 +67,59 @@ export default function App() {
 
   }
 
+  function _isMetricUnits(){
+    return state == 1;
+  }
+
+  function _isEmptyOrZero(str){
+    return (str.trim() == '' || str == '0');
+  }
+
+  function _isNumeric(str){
+    return !isNaN(+str)
+  }
+
   //function to calculate BMI using height and weight
   function calculatBMI(){
     if(isValidData()){
-
+        if(_isMetricUnits()){}
     }
   }
 
   //function to validate data in form
   function isValidData(){
 
-    if(state == 1){
+    if(_isMetricUnits()){
 
-      if((heightStandard.trim() == '' || heightStandard == '0')){
+      if(_isEmptyOrZero(heightMetric)){
         return setErrorMessage('Please enter a height.')
         return false;
       }
+      if(!_isNumeric(heightMetric)){
+        return setErrorMessage('Please enter a valid height.')
+      }
+     
     }
-    else if(state == 0){
-      if((heightInch == '' || heightInch == '0') && 
-         (heightFeet == '' || heightFeet == '0')){
+    else {
+      if(_isEmptyOrZero(heightInch) && _isEmptyOrZero(heightFeet)){
         return setErrorMessage('Please enter a height.')
         return false;
       }
+      if(!_isNumeric(heightInch)){
+        return setErrorMessage('Please only enter numbers for inches.')
+      }
+      if(!_isNumeric(heightFeet)){
+        return setErrorMessage('Please only enter numbers for feet.')
+      }
+
+
     }
-    if((weight.trim() == '' || weight == '0')){
+    if(_isEmptyOrZero(weight)){
       setErrorMessage('Please enter a weight.')
       return false;
+    }
+    if(!_isNumeric(weight)){
+      return setErrorMessage('Please only enter numbers for weight.')
     }
     
     setErrorMessage('');
@@ -120,7 +146,7 @@ export default function App() {
           </CustomTextInput>
         </View>}
         {state == 1 &&
-          <CustomTextInput label="Height (cm)" text={heightStandard} onChangeText={(x)=>setHeightStandard(x)}>
+          <CustomTextInput label="Height (cm)" text={heightMetric} onChangeText={(x)=>setheightMetric(x)}>
           </CustomTextInput>
          }
         <SizedBox height={20} />
