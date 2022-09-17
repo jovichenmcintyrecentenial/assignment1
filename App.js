@@ -6,6 +6,11 @@ function SizedBox(prop){
   return (<View style={{ height: prop.height, width: prop.width }} ></View>);
 }
 
+
+function ErrorText(props){
+  return (<Text style={styles.errorText} >{props.children}</Text>);
+}
+
 function LargeText(props){
   return (<Text style={styles.largeText} >{props.children}</Text>);
 }
@@ -14,9 +19,9 @@ function CustomTextInput(props){
   return(
   <View style={styles.editTextView}>
     <TextInput style={styles.editTextInput}
-    clearTextOnFocus={props.text == '0'?true:false} 
+    clearTextOnFocus={props.text == '0' || props.text == '' ?true:false} 
     onChangeText={(str)=>props.onChangeText(str)}
-    value={props.text == ''?'0':props.text}
+    value={props.text}
     ></TextInput>
     <Text style={styles.editTextSubTitle}>{props.label}</Text>
   </View>);
@@ -51,12 +56,49 @@ export default function App() {
   const [heightFeet ,setHeightFeet ] = React.useState(0);
   const [heightInch ,setHeightInch ] = React.useState(0);
   const [weight ,setWeight ] = React.useState(0);
+  const [errorMessage ,setErrorMessage ] = React.useState(0);
 
   function clearFields(){
-    setHeightStandard(0);
-    setHeightFeet(0);
-    setHeightInch(0);
-    setWeight(0);
+    setHeightStandard('0');
+    setHeightFeet('0');
+    setHeightInch('0');
+    setWeight('0');
+    setErrorMessage('');
+
+  }
+
+  //function to calculate BMI using height and weight
+  function calculatBMI(){
+    if(isValidData()){
+
+    }
+  }
+
+  //function to validate data in form
+  function isValidData(){
+
+    if(state == 1){
+
+      if((heightStandard.trim() == '' || heightStandard == '0')){
+        return setErrorMessage('Please enter a height.')
+        return false;
+      }
+    }
+    else if(state == 0){
+      if((heightInch.trim() == '' || heightInch == '0') && 
+         (heightFeet.trim() == '' || heightFeet == '0')){
+        return setErrorMessage('Please enter a height.')
+        return false;
+      }
+    }
+    if((weight.trim() == '' || weight == '0')){
+      setErrorMessage('Please enter a weight.')
+      return false;
+    }
+    
+    setErrorMessage('');
+    return true;
+
   }
 
   return (
@@ -86,7 +128,15 @@ export default function App() {
         <LargeText>Your weight </LargeText>
         <SizedBox height={10} />
         <CustomTextInput text={weight} onChangeText={(x)=>setWeight(x)} label={"Weight "+(state == 1? "(kg)":"(lb)")}></CustomTextInput>
-        <LargeText>{heightStandard}</LargeText>
+        <SizedBox height={20} />
+
+        <TouchableOpacity
+          style={[styles.activeButton,styles.optionSelectorButton]}
+          onPress={()=>calculatBMI()}
+          underlayColor='#fff'>
+          <Text style={styles.optionSelectorText}>Calculate</Text>
+        </TouchableOpacity>
+        <ErrorText>{errorMessage}</ErrorText>
 
       </ScrollView>
     </View>
@@ -127,6 +177,11 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     backgroundColor:'#ABB8D4',
     borderRadius:1000
+  },
+  errorText:{
+    fontSize:27,
+    color:'#B64E4E'
+
   },
   largeText:{
     fontSize:27,
