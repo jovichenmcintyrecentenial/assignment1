@@ -56,7 +56,7 @@ export default function App() {
   const [heightFeet ,setHeightFeet ] = React.useState(0);
   const [heightInch ,setHeightInch ] = React.useState(0);
   const [weight ,setWeight ] = React.useState(0);
-  const [errorMessage ,setErrorMessage ] = React.useState(0);
+  const [errorMessage ,setErrorMessage ] = React.useState('');
 
   function clearFields(){
     setHeightStandard('0');
@@ -85,8 +85,8 @@ export default function App() {
       }
     }
     else if(state == 0){
-      if((heightInch.trim() == '' || heightInch == '0') && 
-         (heightFeet.trim() == '' || heightFeet == '0')){
+      if((heightInch == '' || heightInch == '0') && 
+         (heightFeet == '' || heightFeet == '0')){
         return setErrorMessage('Please enter a height.')
         return false;
       }
@@ -136,7 +136,7 @@ export default function App() {
           underlayColor='#fff'>
           <Text style={styles.optionSelectorText}>Calculate</Text>
         </TouchableOpacity>
-        <ErrorText>{errorMessage}</ErrorText>
+        {errorMessage !='' && <ErrorText>{errorMessage}</ErrorText>}
 
       </ScrollView>
     </View>
