@@ -66,6 +66,7 @@ export default function App() {
     setHeightInch('0');
     setWeight('0');
     setErrorMessage('');
+    setBMI('');
 
   }
 
@@ -79,6 +80,47 @@ export default function App() {
 
   function _isNumeric(str){
     return !isNaN(+str)
+  }
+
+  function getMessageBasedOnBMI(){
+    const overweight = 'Your BMI fall in the range of 25-29.9. You are classified as overweight, you should consider dieting.';
+    const normalWeight = 'Your BMI fall in the range of 18.5-24.9. You are at the right weight keep it up.';
+    const underWeight = 'Your BMI is below 18.5. You are classified as underweight.';
+    const obesity = 'Your BMI is above 30. You are classified as obese, this is not healthy. You should consider dieting and exercising';
+
+    if(bmi >= 30){
+      return obesity;
+    }
+    else if(bmi >= 25){
+      return overweight;
+    }
+    else if(bmi >= 18.5){
+      return normalWeight;
+    }
+
+    return underWeight;
+  }
+
+  function getColorBasedOnBMI(){
+    const grey = '#939393';
+    const red = '#B64E4E';
+    const orange = '#D66F22';
+    const green = '#56E05E';
+    const yellow = '#DBC561';
+
+    if(bmi >= 30){
+      return red;
+    }
+    else if(bmi >= 25){
+      return orange;
+    }
+    else if(bmi >= 18.5){
+      return green;
+    }
+  
+
+  
+    return yellow;
   }
 
   //function to calculate BMI using height and weight
@@ -177,14 +219,27 @@ export default function App() {
           <Text style={styles.optionSelectorText}>Calculate</Text>
         </TouchableOpacity>
         {errorMessage !='' && <ErrorText>{errorMessage}</ErrorText>}
-        <LargeText>{bmi}</LargeText>
+        {bmi != '' && <View style={styles.center}>
+        <Text style={[styles.bmiText,{color:getColorBasedOnBMI()}]} >{bmi}</Text>
+        <Text style={[styles.bmiDescription,{color:getColorBasedOnBMI}]} >{getMessageBasedOnBMI()}</Text>
+
+        </View>}
       </ScrollView>
     </View>
   );
 }
 const primaryColor = '#325296';
 const styles = StyleSheet.create({
+  bmiDescription:{
+    fontSize:20,
+    color:'#939393'
 
+  },
+  bmiText:{
+    fontSize:50,
+    color:'#939393'
+
+  },
   editTextSubTitle:{
     fontSize:25,
     width:"100%",
@@ -205,6 +260,10 @@ const styles = StyleSheet.create({
     width:"100%",
     color:'#626262',
     textAlign:'center'
+  },
+  center: {
+    alignItems:'center',
+    justifyContent:'center'
   },
   container: {
     height:95,
