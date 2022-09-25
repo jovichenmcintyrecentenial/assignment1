@@ -70,18 +70,21 @@ export default function App() {
 
   }
 
+  //check if app is on metric state
   function _isMetricUnits(){
     return state == 1;
   }
 
   function _isEmptyOrZero(str){
-    return (str.trim() == '' || str == '0');
+    return (str === undefined || str == '0');
   }
 
+  //check if string is a number
   function _isNumeric(str){
     return !isNaN(+str)
   }
 
+  //get message base on BMI interval
   function getMessageBasedOnBMI(){
     const overweight = 'Your BMI fall in the range of 25-29.9. You are classified as overweight, you should consider dieting.';
     const normalWeight = 'Your BMI fall in the range of 18.5-24.9. You are at the right weight keep it up.';
@@ -101,6 +104,7 @@ export default function App() {
     return underWeight;
   }
 
+  //get a color code base on BMI interval
   function getColorBasedOnBMI(){
     const grey = '#939393';
     const red = '#B64E4E';
@@ -117,8 +121,6 @@ export default function App() {
     else if(bmi >= 18.5){
       return green;
     }
-  
-
   
     return yellow;
   }
@@ -149,7 +151,6 @@ export default function App() {
 
       if(_isEmptyOrZero(heightMetric)){
         return setErrorMessage('Please enter a height.')
-        return false;
       }
       if(!_isNumeric(heightMetric)){
         return setErrorMessage('Please enter a valid height.')
@@ -159,7 +160,6 @@ export default function App() {
     else {
       if(_isEmptyOrZero(heightInch) && _isEmptyOrZero(heightFeet)){
         return setErrorMessage('Please enter a height.')
-        return false;
       }
       if(!_isNumeric(heightInch)){
         return setErrorMessage('Please only enter numbers for inches.')
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   appBarTitle:{
     flex:1,
     color:'#fff',
-    marginTop:8,
+    marginTop:2,
     fontSize:25,
     alignItems:'center',
     justifyContent:'center'
